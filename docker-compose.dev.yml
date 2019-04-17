@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  app:
+    volumes:
+      - ./backend:/app
+    ports:
+      - 5000:80
+    links:
+      - postgres
+    environment:
+      - UWSGI_PY_AUTORELOAD=1
+      - SQLALCHEMY_DATABASE_URI=postgresql://admin_dev:secret_password_dev@postgres:5432/app_dev
+
+  redis:
+    image: redis:alpine
+    networks:
+      - app_network_dev
+    ports:
+      - 6379:6379
+
+  postgres:
+    image: postgres:alpine
+    networks:
+      - app_network_dev
+    volumes:
+      - postgres_db_data_dev:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=admin_dev
+      - POSTGRES_PASSWORD=secret_password_dev
+      - POSTGRES_DB=app_dev
+
+networks:
+  app_network_dev:
+
+volumes:
+  postgres_db_data_dev:

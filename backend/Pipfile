@@ -1,0 +1,25 @@
+[[source]]
+name = "alibaba pypi"
+url = "https://mirrors.aliyun.com/pypi/simple"
+verify_ssl = true
+
+[packages]
+flask = "*"
+flask-sqlalchemy = "*"
+flask-wtf = "*"
+flask-restful = "*"
+psycopg2 = "*"
+alembic = "*"
+redis = "*"
+Markdown = "*"
+Pygments = "*"
+cryptography = "*"
+flashtext = "*" # sensitive words detect tool lib
+uwsgi = "*"
+supervisor = '*'
+
+[dev-packages]
+flake8 = "*"
+
+[requires]
+python_version = "3.7"

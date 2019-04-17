@@ -1,0 +1,32 @@
+# nginx.conf
+
+# the upstream component nginx needs to connect to
+upstream app {
+    server unix:///var/run/app.sock;
+}
+
+server {
+    listen      80;
+    server_name 0.0.0.0; # substitute your machine's IP address or FQDN
+    charset     utf-8;
+
+    root /var/www/blog;
+
+    # max upload size
+    client_max_body_size 75M;   # adjust to taste
+
+    location = / {
+        index index.html index.htm;
+    }
+
+	# You may need this to prevent return 404 recursion.
+    location = /404.html {
+        internal;
+    }
+
+    # Finally, send all non-media requests to the uwsgi server.
+    location /api {
+        uwsgi_pass  unix:/var/run/app.sock;
+        include     /etc/nginx/uwsgi_params; # the uwsgi_params file you installed
+    }
+}

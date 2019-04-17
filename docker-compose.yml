@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    networks:
+      - app_network
+    environment:
+      - SQLALCHEMY_DATABASE_URI=postgresql://admin:secret_password@postgres:5432/app
+    ports:
+      - 80:80
+    links:
+      - postgres
+
+  redis:
+    image: redis:alpine
+    networks:
+      - app_network
+    ports:
+      - 6379:6379
+
+  postgres:
+    image: postgres:alpine
+    networks:
+      - app_network
+    volumes:
+      - postgres_db_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=secret_password
+      - POSTGRES_DB=app
+
+networks:
+  app_network:
+
+volumes:
+  postgres_db_data:
